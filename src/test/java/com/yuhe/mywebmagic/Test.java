@@ -13,7 +13,7 @@ public class Test {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String str = "<div class=\"stu-information\"><a href=\"zhangrui807163com\" target=\"_blank\" class=\"stu-image\">";
-		if(str..matches("class")) {
+		if(str.matches("class")) {
 			System.out.println(str);
 		}
 	}

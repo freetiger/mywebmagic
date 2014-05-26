@@ -61,15 +61,16 @@ public class HttpsUtil {
 	public static final int BUFFER = 1024;
 	
 	public static void main(String[] args) throws ParseException, ClientProtocolException, IOException {
-//		String url = " http://www.bctmall.cc/User/Reg.html?";
-//		String data = "tid=20140522141201343008623";
+		String url = " http://www.bctmall.cc/User/Reg.html?";
+		String data = "tid=20140522141201343008623";
+		String strReString = HttpsUtil.requestGet(url+data);
+//		String strReString = HttpsUtil.requestPostData(url, data, "application/x-www-form-urlencoded", "UTF-8").getResponseString("UTF-8");
+		System.out.println(strReString);
+//		
+//		String url = "http://www.bctmall.cc/Reg.html?";
+//		String data = "MC_Email=sese@163.com&MC_RegCID=322&MC_RegCIDC=321&M_LoginPassword=1161hyx&M_LoginPassword_Confirm=1161hyx&M_UserName=sese&Provision=true&ruzType=我是买家&ToUrl=&WebCode=1111&___R_hidd=868";
 //		String strReString = HttpsUtil.requestPostData(url, data, "application/x-www-form-urlencoded", "UTF-8").getResponseString("UTF-8");
 //		System.out.println(strReString);
-//		
-		String url = "http://www.bctmall.cc/Reg.html?";
-		String data = "MC_Email=sese@163.com&MC_RegCID=322&MC_RegCIDC=321&M_LoginPassword=1161hyx&M_LoginPassword_Confirm=1161hyx&M_UserName=sese&Provision=true&ruzType=我是买家&ToUrl=&WebCode=1111&___R_hidd=868";
-		String strReString = HttpsUtil.requestPostData(url, data, "application/x-www-form-urlencoded", "UTF-8").getResponseString("UTF-8");
-		System.out.println(strReString);
 	}
 	
 	/**
