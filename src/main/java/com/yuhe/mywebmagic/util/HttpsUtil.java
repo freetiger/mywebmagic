@@ -10,6 +10,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,8 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
+import com.yuhe.mywebmagic.ocr.OCR;
+
 public class HttpsUtil {
 	private static final Log LOG = LogFactory.getLog(HttpsUtil.class);
 	
@@ -60,12 +63,36 @@ public class HttpsUtil {
 	
 	public static final int BUFFER = 1024;
 	
+	public static String getVerifyCode(String url) {
+		String valCode = null;
+		try {
+			File file = FileUtil.inputstreamToFile(HttpsUtil.requestGetInputStream(url), new File("D:/verifycode/"+StringUtil.getRandomLetterString(32)+".jpg"));
+			Map<String, String> cmdParam = new HashMap<String, String>();
+			cmdParam.put("-l", "eng");
+			cmdParam.put("-psm", "7");
+			valCode = new OCR().recognizeText(file, "jpg", cmdParam);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}     
+		return valCode;
+	}
+	public static String getVerifyCode(String url, HttpClient client) {
+		String valCode = null;
+		try {
+			File file = FileUtil.inputstreamToFile(HttpsUtil.requestGetInputStream(url, client), new File("D:/verifycode/"+StringUtil.getRandomLetterString(32)+".jpg"));
+			Map<String, String> cmdParam = new HashMap<String, String>();
+			cmdParam.put("-l", "eng");
+			cmdParam.put("-psm", "7");
+			valCode = new OCR().recognizeText(file, "jpg", cmdParam);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}     
+		return valCode;
+	}
+	
 	public static void main(String[] args) throws ParseException, ClientProtocolException, IOException {
-		String url = " http://www.bctmall.cc/User/Reg.html?";
-		String data = "tid=20140522141201343008623";
-		String strReString = HttpsUtil.requestGet(url+data);
-//		String strReString = HttpsUtil.requestPostData(url, data, "application/x-www-form-urlencoded", "UTF-8").getResponseString("UTF-8");
-		System.out.println(strReString);
+		String url = "http://www.bctmall.cc/VerifyCodeImage.ashx?q=0.4920468577183783";
+		System.out.println(getVerifyCode(url));  
 //		
 //		String url = "http://www.bctmall.cc/Reg.html?";
 //		String data = "MC_Email=sese@163.com&MC_RegCID=322&MC_RegCIDC=321&M_LoginPassword=1161hyx&M_LoginPassword_Confirm=1161hyx&M_UserName=sese&Provision=true&ruzType=我是买家&ToUrl=&WebCode=1111&___R_hidd=868";
@@ -323,6 +350,14 @@ public class HttpsUtil {
 		HttpResponse httpResponse = client.execute(httpGet);
 		return new HttpResponseWrapper(client, httpResponse);
 	}
+	public static HttpResponseWrapper requestGetResponse(String url,String xForWardedFor, HttpClient client) throws ClientProtocolException, IOException {
+		HttpGet httpGet = new HttpGet(url);
+		if(StringUtil.isNotEmptyString(xForWardedFor)){
+			httpGet.addHeader("X-Forwarded-For", xForWardedFor);
+		}
+		HttpResponse httpResponse = client.execute(httpGet);
+		return new HttpResponseWrapper(client, httpResponse);
+	}
 	/**
 	 * GET方式提交URL请求，会自动重定向
 	 */
@@ -344,8 +379,82 @@ public class HttpsUtil {
 	/**
 	 * GET方式提交URL请求，会自动重定向
 	 */
+	public static String requestGet(String url, String responseCharacter,String xForWardedFor, HttpClient client) {
+		HttpResponseWrapper httpResponseWrapper = null;
+		try {
+			httpResponseWrapper = requestGetResponse(url,xForWardedFor, client);
+			return httpResponseWrapper.getResponseString(responseCharacter);
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		} finally {
+//			if(httpResponseWrapper!=null){
+//				httpResponseWrapper.close();
+//			}
+		}
+		return null;
+	}
+	/**
+	 * GET方式提交URL请求，会自动重定向
+	 */
+	public static InputStream requestGetInputStream(String url, String xForWardedFor) {
+		HttpResponseWrapper httpResponseWrapper = null;
+		try {
+			httpResponseWrapper = requestGetResponse(url,xForWardedFor);
+			return httpResponseWrapper.getResponseStream();
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		} finally {
+			if(httpResponseWrapper!=null){
+				httpResponseWrapper.close();
+			}
+		}
+		return null;
+	}
+	/**
+	 * GET方式提交URL请求，会自动重定向
+	 */
+	public static InputStream requestGetInputStream(String url, String xForWardedFor, HttpClient client) {
+		HttpResponseWrapper httpResponseWrapper = null;
+		try {
+			httpResponseWrapper = requestGetResponse(url,xForWardedFor, client);
+			return httpResponseWrapper.getResponseStream();
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			e.printStackTrace();
+		} finally {
+//			if(httpResponseWrapper!=null){
+//				httpResponseWrapper.close();
+//			}
+		}
+		return null;
+	}
+	
+	/**
+	 * GET方式提交URL请求，会自动重定向
+	 */
 	public static String requestGet(String url) {
-		return requestGet(url, CHARACTER_ENCODING,null);
+		return requestGet(url, CHARACTER_ENCODING,"");
+	}
+	/**
+	 * GET方式提交URL请求，会自动重定向
+	 */
+	public static String requestGet(String url, HttpClient client) {
+		return requestGet(url, CHARACTER_ENCODING, "", client);
+	}
+	
+	/**
+	 * GET方式提交URL请求，会自动重定向
+	 */
+	public static InputStream requestGetInputStream(String url) {
+		return requestGetInputStream(url,"");
+	}
+	/**
+	 * GET方式提交URL请求，会自动重定向
+	 */
+	public static InputStream requestGetInputStream(String url, HttpClient client) {
+		return requestGetInputStream(url,"", client);
 	}
 	
 	/** 
@@ -413,12 +522,28 @@ public class HttpsUtil {
 		HttpResponse httpResponse = client.execute(httpPost);
 		return new HttpResponseWrapper(client, httpResponse);
 	}
+	/**
+	 * POST方式提交非表单数据，返回响应对象
+	 */
+	public static HttpResponseWrapper requestPostData(HttpClient client, String url, String data, String contentType, String requestCharacter,int connectionTimeout,int soTimeout) throws ClientProtocolException, IOException {
+		HttpPost httpPost = new HttpPost(url);
+		httpPost.setHeader(CONTENT_TYPE, contentType);
+		httpPost.setEntity(new StringEntity(data, requestCharacter));
+		HttpResponse httpResponse = client.execute(httpPost);
+		return new HttpResponseWrapper(client, httpResponse);
+	}
 	
 	/**
 	 * POST方式提交非表单数据，返回响应对象
 	 */
 	public static HttpResponseWrapper requestPostData(String url, String data, String contentType, String requestCharacter) throws ClientProtocolException, IOException {
 		return requestPostData(url,data,contentType,requestCharacter,CONNECTION_TIMEOUT,SO_TIMEOUT);
+	}
+	/**
+	 * POST方式提交非表单数据，返回响应对象
+	 */
+	public static HttpResponseWrapper requestPostData(HttpClient client, String url, String data, String contentType, String requestCharacter) throws ClientProtocolException, IOException {
+		return requestPostData(client, url,data,contentType,requestCharacter,CONNECTION_TIMEOUT,SO_TIMEOUT);
 	}
 	/**
 	 * POST非表单方式提交XML数据

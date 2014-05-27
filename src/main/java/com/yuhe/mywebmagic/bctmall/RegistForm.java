@@ -1,6 +1,10 @@
 package com.yuhe.mywebmagic.bctmall;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class RegistForm implements Serializable {
 	private static final long serialVersionUID = 7639592168602099484L;
@@ -84,4 +88,27 @@ public class RegistForm implements Serializable {
 		this.___R_hidd = ___R_hidd;
 	}
 	
+	/**
+	 * 获得支付请求参数串
+	 */
+	public String getRequestData(){
+		StringBuffer params = new StringBuffer();
+		Class<? extends RegistForm> dealClass = this.getClass();
+		Field[] fields = dealClass.getDeclaredFields();
+		for(Field field:fields) {
+			if(field.getModifiers()==Modifier.PRIVATE && field.getType()==java.lang.String.class) {
+				String value;
+				try {
+					value = (String)field.get(this);
+					if(value!=null) {	//StringUtils.isNotBlank(value)
+						params.append("&").append(field.getName()).append("=").append(value);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return params.substring(1);
+	}	
 }
