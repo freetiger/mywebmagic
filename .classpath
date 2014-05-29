@@ -4,7 +4,9 @@
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/tesseract-orc2/WebContent/WEB-INF/lib/jai_imageio-1.1.jar"/>
-	<classpathentry kind="lib" path="/tesseract-orc2/WebContent/WEB-INF/lib/swingx-1.0.jar"/>
+	<classpathentry kind="lib" path="E:/迅雷下载/jai_imageio-1.1.jar"/>
+	<classpathentry kind="lib" path="E:/迅雷下载/html2image-0.9.jar"/>
+	<classpathentry kind="lib" path="E:/迅雷下载/install-lobo-0.98.4.jar"/>
+	<classpathentry kind="lib" path="E:/迅雷下载/cobra-no-commons.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

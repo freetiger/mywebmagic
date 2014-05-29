@@ -59,11 +59,10 @@
 			<artifactId>httpmime</artifactId>
 			<version>4.3.3</version>
 		</dependency>
-		
 		<dependency>
-		   <groupId>gui.ava</groupId>
-		   <artifactId>html2image</artifactId>
-		   <version>0.9</version>
+			<groupId>org.swinglabs</groupId>
+			<artifactId>swingx</artifactId>
+			<version>1.0</version>
 		</dependency>
   </dependencies>
 </project>
