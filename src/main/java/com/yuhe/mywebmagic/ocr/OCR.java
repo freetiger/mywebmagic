@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.jdesktop.swingx.util.OS;
 
+import com.yuhe.mywebmagic.util.ImageIOHelper;
 import com.yuhe.mywebmagic.util.StringUtil;
 
 public class OCR {

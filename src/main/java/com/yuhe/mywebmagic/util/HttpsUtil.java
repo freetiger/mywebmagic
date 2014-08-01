@@ -76,14 +76,16 @@ public class HttpsUtil {
 		}     
 		return valCode;
 	}
-	public static String getVerifyCode(String url, HttpClient client) {
+	public static String getVerifyCode(String url, String imageFormat, HttpClient client) {
 		String valCode = null;
 		try {
 			File file = FileUtil.inputstreamToFile(HttpsUtil.requestGetInputStream(url, client), new File("D:/verifycode/"+StringUtil.getRandomLetterString(32)+".jpg"));
+			String outputFile = "D:/verifycode/"+StringUtil.getRandomLetterString(32)+".jpg";
+			ImageGrayBinaryUtil.grayBinary(file, new File(outputFile));
 			Map<String, String> cmdParam = new HashMap<String, String>();
 			cmdParam.put("-l", "eng");
 			cmdParam.put("-psm", "7");
-			valCode = new OCR().recognizeText(file, "jpg", cmdParam);
+			valCode = new OCR().recognizeText(new File(outputFile), imageFormat, cmdParam);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}     

@@ -1,4 +1,4 @@
-package com.yuhe.mywebmagic.ocr;
+package com.yuhe.mywebmagic.util;
 import java.awt.image.BufferedImage;  
 import java.io.File;  
 import java.io.IOException;  

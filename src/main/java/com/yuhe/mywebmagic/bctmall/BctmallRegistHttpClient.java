@@ -34,7 +34,7 @@ public class BctmallRegistHttpClient {
 		}
 		System.out.println(___R_hidd);
 		//
-		String webCode = HttpsUtil.getVerifyCode("http://www.bctmall.cc/VerifyCodeImage.ashx?q=0.4920468577183783", client);
+		String webCode = HttpsUtil.getVerifyCode("http://www.bctmall.cc/VerifyCodeImage.ashx?q=0.4920468577183783", "jpg", client);
 		System.out.println(webCode);
 		//
     	String m_LoginPassword = StringUtil.getRandomLetterString(8).toLowerCase();
